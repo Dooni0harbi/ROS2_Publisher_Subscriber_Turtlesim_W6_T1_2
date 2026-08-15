@@ -62,64 +62,19 @@ Create the Publisher file:
 nano publisher_LoveRobot.py
 ```
 
-Add the following code:
+Open the project file:
 
-```python
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
+publisher_LoveRobot.py
 
+Copy its code and paste it into the file created in the terminal.
 
-class RobotPublisher(Node):
+Save the file:
 
-    def __init__(self):
-        super().__init__('robot_publisher')
-
-        self.publisher_ = self.create_publisher(
-            String,
-            'robot_message',
-            10
-        )
-
-        self.timer = self.create_timer(1.0, self.publish_message)
-
-    def publish_message(self):
-        msg = String()
-
-        msg.data = 'Hi, I love Robots'
-
-        self.publisher_.publish(msg)
-
-        self.get_logger().info(
-            'Publishing: "%s"' % msg.data
-        )
-
-
-def main(args=None):
-    rclpy.init(args=args)
-
-    node = RobotPublisher()
-
-    rclpy.spin(node)
-
-    node.destroy_node()
-    rclpy.shutdown()
-
-
-if __name__ == '__main__':
-    main()
-```
-
-Save and exit:
-
-```text
 Ctrl + O
 Enter
 Ctrl + X
-```
 
 ---
-
 ## 4. Subscriber
 
 Create the Subscriber file:
@@ -128,55 +83,17 @@ Create the Subscriber file:
 nano subscriber_LoveRobot.py
 ```
 
-Add:
+Open the project file:
 
-```python
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
+subscriber_LoveRobot.py
 
-
-class RobotSubscriber(Node):
-
-    def __init__(self):
-        super().__init__('robot_subscriber')
-
-        self.subscription = self.create_subscription(
-            String,
-            'robot_message',
-            self.listener_callback,
-            10
-        )
-
-    def listener_callback(self, msg):
-
-        self.get_logger().info(
-            'Received: "%s"' % msg.data
-        )
-
-
-def main(args=None):
-    rclpy.init(args=args)
-
-    node = RobotSubscriber()
-
-    rclpy.spin(node)
-
-    node.destroy_node()
-    rclpy.shutdown()
-
-
-if __name__ == '__main__':
-    main()
-```
+Copy its code and paste it into the file created in the terminal.
 
 Save and exit:
 
-```text
 Ctrl + O
 Enter
 Ctrl + X
-```
 
 ---
 
@@ -273,99 +190,61 @@ Keep the Turtlesim window running.
 
 ---
 
-## 2. Create the Square Controller
+## 2. Open Another Terminal
 
-Open another terminal:
+Open a second terminal and enter Ubuntu/WSL if needed:
+
+```bash
+wsl
+```
+
+Then return to the Home directory:
 
 ```bash
 cd ~
-nano square.py
-```
-
-Add:
-
-```python
-import rclpy
-from rclpy.node import Node
-from geometry_msgs.msg import Twist
-import time
-
-
-class Square(Node):
-
-    def __init__(self):
-        super().__init__('square_node')
-
-        self.publisher = self.create_publisher(
-            Twist,
-            '/turtle1/cmd_vel',
-            10
-        )
-
-        self.draw_square()
-
-    def draw_square(self):
-        msg = Twist()
-
-        for i in range(4):
-
-            # Move forward
-            msg.linear.x = 2.0
-            msg.angular.z = 0.0
-
-            self.publisher.publish(msg)
-            time.sleep(2)
-
-            # Stop
-            msg.linear.x = 0.0
-            self.publisher.publish(msg)
-            time.sleep(0.5)
-
-            # Turn approximately 90 degrees
-            msg.linear.x = 0.0
-            msg.angular.z = 1.57
-
-            self.publisher.publish(msg)
-            time.sleep(1)
-
-            # Stop
-            msg.angular.z = 0.0
-            self.publisher.publish(msg)
-            time.sleep(0.5)
-
-
-def main():
-
-    rclpy.init()
-
-    node = Square()
-
-    node.destroy_node()
-    rclpy.shutdown()
-
-
-if __name__ == '__main__':
-    main()
-```
-
-Save and exit:
-
-```text
-Ctrl + O
-Enter
-Ctrl + X
 ```
 
 ---
 
-## 3. Run the Square Controller
+## 3. Create the Square Controller File
+
+Create the Python file:
+
+```bash
+nano square.py
+```
+
+Open the project file:
+
+`square.py`
+
+Copy its code and paste it into the file created in the terminal.
+
+Save the file:
+
+**Ctrl + O** → **Enter**
+
+Then exit:
+
+**Ctrl + X**
+
+---
+
+## 4. Run the Square Controller
+
+Source ROS 2:
 
 ```bash
 source /opt/ros/humble/setup.bash
+```
+
+Then run the Python controller:
+
+```bash
 python3 square.py
 ```
 
-The node publishes velocity commands to:
+The node sends velocity commands to the following ROS 2 topic:
 
 ```text
 /turtle1/cmd_vel
@@ -373,10 +252,7 @@ The node publishes velocity commands to:
 
 using the ROS 2 `Twist` message.
 
-* `linear.x` controls forward movement.
-* `angular.z` controls rotation.
-
-The sequence is repeated four times to form the square.
+The turtle moves forward and rotates approximately **90°** four times to form a square.
 
 ---
 
@@ -384,8 +260,8 @@ The sequence is repeated four times to form the square.
 
 The screenshot below shows the final square drawn by Turtlesim.
 
-<img width="507" height="523" alt="لقطة شاشة 2026-08-13 230005" src="https://github.com/user-attachments/assets/86fa3087-a0d3-41e4-bb3b-2d4a794b4f5e" />
 <img width="506" height="537" alt="لقطة شاشة 2026-08-13 225933" src="https://github.com/user-attachments/assets/f21b7a47-85b3-4847-a68b-bfab885b236b" />
+<img width="507" height="523" alt="لقطة شاشة 2026-08-13 230005" src="https://github.com/user-attachments/assets/86fa3087-a0d3-41e4-bb3b-2d4a794b4f5e" />
 <img width="505" height="524" alt="لقطة شاشة 2026-08-13 230013" src="https://github.com/user-attachments/assets/8cf854bc-8d9c-4b25-beb5-209d8002d5ab" />
 
 ```text
@@ -393,23 +269,31 @@ The screenshot below shows the final square drawn by Turtlesim.
 ```
 
 ---
+## 📂 Project Structure
 
-# 🛠️ Technologies & Concepts
+```text
+ROS2_Publisher_Subscriber_Turtlesim_W6_T1_2/
+│
+├── README.md
+├── publisher_LoveRobot.py
+├── subscriber_LoveRobot.py
+└── square.py
+```
 
-* ROS 2 Humble
-* Python
-* `rclpy`
-* Publisher / Subscriber
-* ROS 2 Topics
-* `std_msgs/String`
-* `geometry_msgs/Twist`
-* Turtlesim
-* Ubuntu / WSL
-* Robot motion control
+## 🛠️ Technologies Used
 
+ROS 2 Humble
+Python
+rclpy
+Publisher / Subscriber
+ROS 2 Topics
+std_msgs
+geometry_msgs
+Turtlesim
+Ubuntu / WSL
 ---
 
-## 🎯 What Was Applied
+## 🎯 Concepts Applied
 
 ### Publisher / Subscriber Communication
 
@@ -443,6 +327,6 @@ Linear and angular velocities are combined to create four straight movements and
 
 ---
 
-## 🎓 Training Context
+##  Training Context
 
 These tasks were completed as part of the **ROS and AI Track during my Robotics Engineering Internship at Smart Methods**.
